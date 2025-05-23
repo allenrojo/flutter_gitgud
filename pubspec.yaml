@@ -21,6 +21,12 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icon/
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: font/nunito_italic.ttf
+        - asset: font/nunito_regular.ttf
+        
 flutter_launcher_icons:
   android: true
   ios: true
