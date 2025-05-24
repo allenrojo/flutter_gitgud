@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_gitgud/pages/welcome.dart';
+import '../utils/colors.dart'; 
 
 void main() {
   runApp(const MainApp());
@@ -12,7 +13,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: const Color(0xFF6C63FF),
+        primarySwatch: customPurple,
         fontFamily: 'nunito_regular',
         textTheme: const TextTheme(
           bodyMedium: TextStyle(fontSize: 16),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../utils/colors.dart';
 class CustomFilledButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
@@ -17,7 +17,7 @@ class CustomFilledButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: customPurple,
           foregroundColor: Colors.white,
           minimumSize: const Size.fromHeight(48),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

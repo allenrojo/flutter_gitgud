@@ -22,9 +22,7 @@ class Welcome extends StatelessWidget {
               child: Image.asset('assets/icon/brandmark.png'),
             ),
 
-            const SizedBox(height: 40),
 
-            // Reusable outlined button
             CustomOutlinedButton(
               text: 'Log in',
               onPressed: () {
@@ -37,7 +35,6 @@ class Welcome extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            // Reusable elevated button
             CustomFilledButton(
               text: 'Sign up',
               onPressed: () {
@@ -50,28 +47,32 @@ class Welcome extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // Divider with "or"
+
             const DividerWithText(text: 'or'),
 
             const SizedBox(height: 16),
 
-            // Continue with Github
             CustomOutlinedIconButton(
               text: 'Continue with Github',
               iconPath: 'assets/icon/github.png',
               onPressed: () {
-                print('Continue with Github pressed!');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Login()),
+                );
               },
             ),
 
             const SizedBox(height: 8),
 
-            // Continue with Google
             CustomOutlinedIconButton(
               text: 'Continue with Google',
               iconPath: 'assets/icon/google.png',
               onPressed: () {
-                print('Continue with Google pressed!');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Login()),
+                );
               },
             ),
           ],

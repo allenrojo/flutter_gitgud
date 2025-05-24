@@ -1,0 +1,17 @@
+final List<Map<String, String>> topics = [
+  {'label': 'Machine Learning', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Android Dev', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Dev Ops', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Game Dev', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'iOS Dev', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Web Dev', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Data Science', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Cybersecurity', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Cloud Computing', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Blockchain', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'AR/VR', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Robotics', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Quantum Computing', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Embedded Systems', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Networking', 'icon': 'assets/icon/topic_icon.png'},
+];

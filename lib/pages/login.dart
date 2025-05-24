@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/button_filled.dart';
-import '../components/text_outline.dart';
+import '../components/textfield_outline.dart';
 import 'package:flutter_application_gitgud/pages/topics.dart';
 
 class Login extends StatelessWidget {
@@ -20,7 +20,7 @@ class Login extends StatelessWidget {
               child: Image.asset('assets/icon/brandmark.png'),
             ),
 
-            const SizedBox(height: 40),
+
 
             CustomOutlinedTextField(hintText: 'Email or phone number'),
             const SizedBox(height: 12),
