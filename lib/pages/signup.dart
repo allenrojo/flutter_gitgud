@@ -60,6 +60,9 @@ class _SignupState extends State<Signup> {
                 ],
               ),
             ),
+            const SizedBox(height: 12),
+
+            CustomOutlinedTextField(hintText: 'Username'),
 
             const SizedBox(height: 12),
 

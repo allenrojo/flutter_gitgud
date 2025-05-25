@@ -15,3 +15,9 @@ final List<Map<String, String>> topics = [
   {'label': 'Embedded Systems', 'icon': 'assets/icon/topic_icon.png'},
   {'label': 'Networking', 'icon': 'assets/icon/topic_icon.png'},
 ];
+
+final List<Map<String, String>> skill_level = [
+  {'label': 'Beginner', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Intermediate', 'icon': 'assets/icon/topic_icon.png'},
+  {'label': 'Advanced', 'icon': 'assets/icon/topic_icon.png'}
+];
