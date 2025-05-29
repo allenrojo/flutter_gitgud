@@ -28,3 +28,6 @@ const Map<int, Color> grayShades = {
 };
 
 const MaterialColor customGray = MaterialColor(0xFF6E7491, grayShades);
+
+const Color customWhite = Color(0xFFF3F3F3);
+

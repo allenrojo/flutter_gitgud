@@ -46,13 +46,17 @@ class _SkillLevelState extends State<SkillLevel> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 12),
+
             const Text(
               'Pick the appropriate proficiency level to personalize your GitGud feed. You can add more later.',
               style: TextStyle(fontSize: 16, color: customGray),
               textAlign: TextAlign.left,
             ),
+            
             const SizedBox(height: 12),
+
             Divider(color: customGray[100]),
+
             const SizedBox(height: 12),
 
             Expanded(
@@ -98,11 +102,9 @@ class _SkillLevelState extends State<SkillLevel> {
                       // Do something with selectedTopic if needed
                     }
                     Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Home(),
-                                ),
-                              );
+                      context,
+                      MaterialPageRoute(builder: (context) => const Home()),
+                    );
                   },
                 ),
               ),

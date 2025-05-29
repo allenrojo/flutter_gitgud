@@ -7,16 +7,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  github: ^9.25.0
    
   flutter_web_auth_2: ^4.1.0
   http: ^1.1.0
   flutter_dotenv: ^5.0.4
   flutter_svg: ^2.0.7
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.3
+
 flutter:
   uses-material-design: true
   assets:
@@ -27,6 +30,7 @@ flutter:
       fonts:
         - asset: font/nunito_italic.ttf
         - asset: font/nunito_regular.ttf
+
 flutter_launcher_icons:
   android: true
   ios: true
