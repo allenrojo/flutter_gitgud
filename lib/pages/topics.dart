@@ -1,25 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_gitgud/components/button_filled.dart';
-import 'package:flutter_application_gitgud/pages/skill_level.dart';
+import 'package:flutter_application_gitgud/pages/home.dart';
+
 import 'package:flutter_application_gitgud/utils/colors.dart';
+import 'package:flutter_application_gitgud/utils/github_api.dart';
 
 import '../components/textfield_outline.dart';
 import '../components/topic_grid_item.dart';
 import '../utils/grid_data.dart';
 
-class NoGlowScrollBehavior extends ScrollBehavior {
-  @override
-  Widget buildOverscrollIndicator(
-    BuildContext context,
-    Widget child,
-    ScrollableDetails details,
-  ) {
-    return child; // disables the glow effect
-  }
-} //needs work
-
 class Topics extends StatefulWidget {
-  const Topics({super.key});
+  final String accessToken;
+  const Topics({Key? key, required this.accessToken}) : super(key: key);
 
   @override
   State<Topics> createState() => _TopicsState();
@@ -31,7 +23,6 @@ class _TopicsState extends State<Topics> {
   @override
   Widget build(BuildContext context) {
     const double buttonHeight = 56.0;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Select Topics', style: TextStyle(color: customGray)),
@@ -60,37 +51,34 @@ class _TopicsState extends State<Topics> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(bottom: buttonHeight + 16),
-                    child: ScrollConfiguration(
-                      behavior: NoGlowScrollBehavior(),
-                      child: GridView.builder(
-                        itemCount: topics.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 20,
-                              crossAxisSpacing: 20,
-                              childAspectRatio: 0.85,
-                            ),
-                        itemBuilder: (context, index) {
-                          final topic = topics[index];
-                          final isSelected = selectedIndices.contains(index);
+                    child: GridView.builder(
+                      itemCount: topics.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 20,
+                            crossAxisSpacing: 20,
+                            childAspectRatio: 0.85,
+                          ),
+                      itemBuilder: (context, index) {
+                        final topic = topics[index];
+                        final isSelected = selectedIndices.contains(index);
 
-                          return TopicGridItem(
-                            label: topic['label']!,
-                            iconPath: topic['icon']!,
-                            isSelected: isSelected,
-                            onTap: () {
-                              setState(() {
-                                if (isSelected) {
-                                  selectedIndices.remove(index);
-                                } else {
-                                  selectedIndices.add(index);
-                                }
-                              });
-                            },
-                          );
-                        },
-                      ),
+                        return TopicGridItem(
+                          label: topic['label']!,
+                          iconPath: topic['icon']!,
+                          isSelected: isSelected,
+                          onTap: () {
+                            setState(() {
+                              if (isSelected) {
+                                selectedIndices.remove(index);
+                              } else {
+                                selectedIndices.add(index);
+                              }
+                            });
+                          },
+                        );
+                      },
                     ),
                   ),
 
@@ -109,14 +97,63 @@ class _TopicsState extends State<Topics> {
                           height: buttonHeight,
                           child: CustomFilledButton(
                             text: 'Next',
-                            onPressed: () {
-                              // You can use selectedIndices here to get selected topics
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SkillLevel(),
-                                ),
+                            onPressed: () async {
+                              final selectedTopics =
+                                  selectedIndices
+                                      .map((index) => topics[index]['label']!)
+                                      .toList();
+
+                              if (selectedTopics.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Please select at least one topic',
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              // Show loading indicator while fetching
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder:
+                                    (_) => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
                               );
+
+                              try {
+                                final repos = await fetchRepositoriesByTopics(
+                                  accessToken: widget.accessToken,
+                                  selectedTopics: selectedTopics,
+                                  perPage: 15,
+                                );
+
+                                Navigator.pop(context); // Remove loading dialog
+
+                                // Navigate to SkillLevel or your feed page with repos
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => Home(
+                                          accessToken: widget.accessToken,
+                                          repositories: repos,
+                                        ),
+                                  ),
+                                );
+                              } catch (e) {
+                                Navigator.pop(context); // Remove loading dialog
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Failed to fetch repositories: $e',
+                                    ),
+                                  ),
+                                );
+                              }
                             },
                           ),
                         ),

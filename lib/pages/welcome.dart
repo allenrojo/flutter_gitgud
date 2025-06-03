@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_gitgud/pages/login.dart';
 import 'package:flutter_application_gitgud/pages/signup.dart';
 import 'package:flutter_application_gitgud/pages/topics.dart';
+import 'package:flutter_application_gitgud/utils/secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_application_gitgud/utils/auth_service.dart';
 
@@ -65,15 +66,15 @@ class _WelcomeState extends State<Welcome> {
               iconPath: 'assets/icon/github.png',
               onPressed: () async {
                 try {
-                  final success = await signInWithGitHub();
-
-                  if (!mounted) return;
-
-                  if (success) {
-                    print('🟢 Navigating to Topics page...');
+                  final accessToken = await signInWithGitHub();
+                  if (accessToken != null) {
+                    await SecureStorage.saveToken(accessToken);
+                    if (!mounted) return;
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => Topics()),
+                      MaterialPageRoute(
+                        builder: (context) => Topics(accessToken: accessToken),
+                      ),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -89,7 +90,6 @@ class _WelcomeState extends State<Welcome> {
               },
             ),
             const SizedBox(height: 8),
-
           ],
         ),
       ),

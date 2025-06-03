@@ -74,7 +74,7 @@ class _SignupState extends State<Signup> {
 
             const SizedBox(height: 12),
 
-            CustomFilledButton(
+            /*CustomFilledButton(
               text: 'Log in',
               onPressed: () {
                 Navigator.push(
@@ -82,7 +82,7 @@ class _SignupState extends State<Signup> {
                   MaterialPageRoute(builder: (context) => const Topics()),
                 );
               },
-            ),
+            ),*/
             
             CustomCheckbox(
               value: agreeTerms,

@@ -26,7 +26,7 @@ class Login extends StatelessWidget {
             const SizedBox(height: 12),
             CustomOutlinedTextField(hintText: 'Password', obscureText: true),
             const SizedBox(height: 12),
-            CustomFilledButton(
+            /*CustomFilledButton(
               text: 'Log in',
               onPressed: () {
                 Navigator.push(
@@ -34,7 +34,7 @@ class Login extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const Topics()),
                 );
               },
-            ),
+            ),*/
           ]
         )
       ),
