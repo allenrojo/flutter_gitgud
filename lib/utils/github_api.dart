@@ -5,6 +5,7 @@ Future<List<Map<String, dynamic>>> fetchRepositoriesByTopics({
   required String accessToken,
   required List<String> selectedTopics,
   int perPage = 10,
+  int page = 1,
 }) async {
   final topicMap = {
     'Machine Learning': 'machine-learning',
@@ -45,7 +46,7 @@ Future<List<Map<String, dynamic>>> fetchRepositoriesByTopics({
     }
   }
 
-  // Remove duplicates by repo ID
+
   final uniqueRepos = {for (var repo in repos) repo['id']: repo}.values.toList();
 
   // Sort by stars descending

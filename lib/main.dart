@@ -57,7 +57,7 @@ class MainApp extends StatelessWidget {
       routes: {
         '/welcome': (context) => const Welcome(),
         '/topics': (context) => Topics(accessToken: token ?? ''),
-        '/home': (context) => Home(accessToken: token ?? '', repositories: []),
+        '/home': (context) => Home(accessToken: token ?? '', repositories: [],selectedTopics: selectedTopics ?? [],),
       },
     );
   }
@@ -91,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => Home(accessToken: widget.token, repositories: repos),
+          builder: (_) => Home(accessToken: widget.token, repositories: repos,selectedTopics: widget.selectedTopics,),
         ),
       );
     } catch (e) {

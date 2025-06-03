@@ -149,6 +149,7 @@ class _TopicsState extends State<Topics> {
                                         (context) => Home(
                                           accessToken: widget.accessToken,
                                           repositories: repos,
+                                          selectedTopics: selectedTopics,
                                         ),
                                   ),
                                 );
