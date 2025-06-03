@@ -8,6 +8,13 @@ import 'package:flutter_application_gitgud/utils/github_api.dart';
 import '../components/textfield_outline.dart';
 import '../components/topic_grid_item.dart';
 import '../utils/grid_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Save selected topics as a list of strings
+Future<void> saveSelectedTopics(List<String> topics) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setStringList('selected_topics', topics);
+}
 
 class Topics extends StatefulWidget {
   final String accessToken;
@@ -113,6 +120,7 @@ class _TopicsState extends State<Topics> {
                                 );
                                 return;
                               }
+                              await saveSelectedTopics(selectedTopics);
 
                               // Show loading indicator while fetching
                               showDialog(
