@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "99397206277",
+    "project_id": "gitgud-app",
+    "storage_bucket": "gitgud-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99397206277:android:20b6d2f561b5b9c80cb76c",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_gitgud"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXAGPoUIW0nDvpOcC8Z7RmtZ94M0uy9ms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

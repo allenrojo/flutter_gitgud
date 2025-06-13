@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_gitgud/pages/topics.dart';
+import 'package:flutter_application_gitgud/pages/welcome.dart';
+import 'package:flutter_application_gitgud/utils/colors.dart';
 import 'package:flutter_application_gitgud/utils/github_api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../components/repository_card.dart'; // Import your new card widget
 
 class Home extends StatefulWidget {
@@ -59,46 +62,77 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text(
-          'GitGud',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-        ),
+        toolbarHeight: 100,
+        leadingWidth: 150,
+        titleSpacing: 0,
+        title: null,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
+        leading: SizedBox(
+          child: Center(child: Image.asset('assets/icon/brandmark.png',height:double.infinity, fit: BoxFit.fitHeight)),
+          
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // Add search functionality here
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.tune),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Topics(accessToken: widget.accessToken),
-                ),
-              );
-            },
+            icon: const Icon(Icons.logout_rounded, color: customGray,),
+            onPressed: () => logout(context),
           ),
         ],
       ),
-      body: _repositories.isEmpty && _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-              onRefresh: _refreshRepositories,
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                itemCount: _repositories.length,
-                itemBuilder: (context, index) {
-                  final repo = _repositories[index];
-                  return RepositoryCard(repository: repo);
-                },
+      body:
+          _repositories.isEmpty && _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : RefreshIndicator(
+                onRefresh: _refreshRepositories,
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  itemCount: _repositories.length,
+                  itemBuilder: (context, index) {
+                    final repo = _repositories[index];
+                    return RepositoryCard(repository: repo);
+                  },
+                ),
               ),
-            ),
     );
   }
 }
+Future<void> logout(BuildContext context) async {
+  showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirm Logout'),
+        content: const SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text('Are you sure you want to logout?'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('No'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Dismiss the dialog
+            },
+          ),
+          TextButton(
+            child: const Text('Yes'),
+            onPressed: () async {
+              Navigator.of(context).pop(); // Dismiss the dialog first
+
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('github_access_token'); // Clear token
+
+              // Navigate to login screen
+              Navigator.of(context).pushReplacementNamed('/welcome');
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+

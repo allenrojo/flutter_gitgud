@@ -54,3 +54,28 @@ Future<List<Map<String, dynamic>>> fetchRepositoriesByTopics({
 
   return uniqueRepos;
 }
+
+Future<String?> fetchReadme(String owner, String repo, String? githubToken) async {
+  final url = Uri.parse('https://api.github.com/repos/$owner/$repo/readme');
+
+  final headers = {
+    'Accept': 'application/vnd.github+json',
+    if (githubToken != null) 'Authorization': 'Bearer $githubToken',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+
+  final response = await http.get(url, headers: headers);
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    final encodedContent = data['content'] as String?;
+    if (encodedContent != null) {
+      final decodedBytes = base64.decode(encodedContent);
+      return utf8.decode(decodedBytes);
+    }
+  } else {
+    print('Failed to fetch README: ${response.statusCode} ${response.body}');
+  }
+  return null;
+}
+
