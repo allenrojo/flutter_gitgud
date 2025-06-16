@@ -8,11 +8,8 @@ class RepositoryCard extends StatefulWidget {
   final Map<String, dynamic> repository;
   final String? githubToken; // Optional GitHub token for API calls
 
-  const RepositoryCard({
-    Key? key,
-    required this.repository,
-    this.githubToken,
-  }) : super(key: key);
+  const RepositoryCard({Key? key, required this.repository, this.githubToken})
+    : super(key: key);
 
   @override
   State<RepositoryCard> createState() => _RepositoryCardState();
@@ -41,6 +38,10 @@ class _RepositoryCardState extends State<RepositoryCard> {
       final name = repo['name'] as String;
       String? promptText = repo['description'];
 
+      // Log the initial description
+      print('Repo: $owner/$name');
+      print('Initial description: ${promptText ?? "No description"}');
+
       // If description is missing or empty, fetch README content
       if (promptText == null || promptText.trim().isEmpty) {
         promptText = await _fetchReadme(owner, name, widget.githubToken);
@@ -60,7 +61,13 @@ class _RepositoryCardState extends State<RepositoryCard> {
       }
 
       final prompt = 'Summarize this GitHub repository content:\n$promptText';
+
+      // Log the prompt sent to Gemini
+      print('Prompt sent to Gemini API: ${prompt.length} characters');
+
       final summary = await GeminiService.generateSummary(prompt);
+      // Log the Gemini API response summary
+      print('Gemini summary: ${summary ?? "No summary returned"}');
 
       if (mounted) {
         setState(() {
@@ -110,9 +117,7 @@ class _RepositoryCardState extends State<RepositoryCard> {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () => _launchURL(repo['html_url']),
@@ -165,9 +170,7 @@ class _RepositoryCardState extends State<RepositoryCard> {
       children: [
         CircleAvatar(
           radius: 16,
-          backgroundImage: NetworkImage(
-            repo['owner']['avatar_url'] ?? '',
-          ),
+          backgroundImage: NetworkImage(repo['owner']['avatar_url'] ?? ''),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -176,10 +179,7 @@ class _RepositoryCardState extends State<RepositoryCard> {
             children: [
               Text(
                 repo['owner']['login'] ?? '',
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
               ),
               Text(
                 repo['name'] ?? 'No name',
@@ -202,10 +202,7 @@ class _RepositoryCardState extends State<RepositoryCard> {
             ),
             child: const Text(
               'Private',
-              style: TextStyle(
-                fontSize: 10,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 10, color: Colors.grey),
             ),
           ),
       ],
@@ -220,11 +217,7 @@ class _RepositoryCardState extends State<RepositoryCard> {
 
     return Text(
       description,
-      style: TextStyle(
-        fontSize: 14,
-        color: Colors.grey[600],
-        height: 1.4,
-      ),
+      style: TextStyle(fontSize: 14, color: Colors.grey[600], height: 1.4),
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
     );
@@ -245,39 +238,22 @@ class _RepositoryCardState extends State<RepositoryCard> {
           const SizedBox(width: 6),
           Text(
             repo['language'],
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
-            ),
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
           ),
           const SizedBox(width: 16),
         ],
-        Icon(
-          Icons.star_border,
-          size: 16,
-          color: Colors.grey[600],
-        ),
+        Icon(Icons.star_border, size: 16, color: Colors.grey[600]),
         const SizedBox(width: 4),
         Text(
           _formatNumber(repo['stargazers_count'] ?? 0),
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.grey,
-          ),
+          style: const TextStyle(fontSize: 12, color: Colors.grey),
         ),
         const SizedBox(width: 16),
-        Icon(
-          Icons.call_split,
-          size: 16,
-          color: Colors.grey[600],
-        ),
+        Icon(Icons.call_split, size: 16, color: Colors.grey[600]),
         const SizedBox(width: 4),
         Text(
           _formatNumber(repo['forks_count'] ?? 0),
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.grey,
-          ),
+          style: const TextStyle(fontSize: 12, color: Colors.grey),
         ),
       ],
     );
@@ -289,10 +265,7 @@ class _RepositoryCardState extends State<RepositoryCard> {
 
     return Text(
       'Updated ${_formatDate(updatedAt)}',
-      style: TextStyle(
-        fontSize: 11,
-        color: Colors.grey[500],
-      ),
+      style: TextStyle(fontSize: 11, color: Colors.grey[500]),
     );
   }
 

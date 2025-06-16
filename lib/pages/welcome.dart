@@ -4,10 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_gitgud/pages/topics.dart';
 import 'package:flutter_application_gitgud/utils/secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../components/button_filled.dart';
 import '../components/button_icon.dart';
-import '../components/button_outlined.dart';
-import '../components/text_divider.dart';
+
 
 class Welcome extends StatefulWidget {
   const Welcome({super.key});

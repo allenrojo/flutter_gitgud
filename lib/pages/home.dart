@@ -75,7 +75,7 @@ class _HomeState extends State<Home> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout_rounded, color: customGray,),
+            icon: const Icon(Icons.account_circle_outlined, color: customGray,),
             onPressed: () => logout(context),
           ),
         ],
