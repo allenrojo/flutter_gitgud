@@ -70,12 +70,32 @@ class _HomeState extends State<Home> {
         foregroundColor: Colors.black,
         elevation: 0,
         leading: SizedBox(
-          child: Center(child: Image.asset('assets/icon/brandmark.png',height:double.infinity, fit: BoxFit.fitHeight)),
-          
+          child: Center(
+            child: Image.asset(
+              'assets/icon/brandmark.png',
+              height: double.infinity,
+              fit: BoxFit.fitHeight,
+            ),
+          ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.account_circle_outlined, color: customGray,),
+            icon: const Icon(Icons.search_rounded, color: customGray),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => Topics(
+                        accessToken: widget.accessToken,
+                      ),
+                ),
+              );
+            },
+          ),
+
+          IconButton(
+            icon: const Icon(Icons.account_circle_outlined, color: customGray),
             onPressed: () => logout(context),
           ),
         ],
@@ -97,6 +117,7 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
 Future<void> logout(BuildContext context) async {
   showDialog<void>(
     context: context,
@@ -106,9 +127,7 @@ Future<void> logout(BuildContext context) async {
         title: const Text('Confirm Logout'),
         content: const SingleChildScrollView(
           child: ListBody(
-            children: <Widget>[
-              Text('Are you sure you want to logout?'),
-            ],
+            children: <Widget>[Text('Are you sure you want to logout?')],
           ),
         ),
         actions: <Widget>[
@@ -135,4 +154,3 @@ Future<void> logout(BuildContext context) async {
     },
   );
 }
-

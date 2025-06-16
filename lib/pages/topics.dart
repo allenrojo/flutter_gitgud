@@ -1,20 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_gitgud/components/button_filled.dart';
 import 'package:flutter_application_gitgud/pages/home.dart';
-
 import 'package:flutter_application_gitgud/utils/colors.dart';
 import 'package:flutter_application_gitgud/utils/github_api.dart';
-
 import '../components/textfield_outline.dart';
 import '../components/topic_grid_item.dart';
 import '../utils/grid_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-// Save selected topics as a list of strings
-Future<void> saveSelectedTopics(List<String> topics) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setStringList('selected_topics', topics);
-}
 
 class Topics extends StatefulWidget {
   final String accessToken;
@@ -25,7 +17,33 @@ class Topics extends StatefulWidget {
 }
 
 class _TopicsState extends State<Topics> {
-  final Set<int> selectedIndices = {};
+  final Set<String> selectedLabels = {};
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  List<Map<String, String>> get filteredTopics {
+    if (_searchQuery.isEmpty) return topics;
+    return topics.where((topic) {
+      final label = topic['label']!.toLowerCase();
+      return label.contains(_searchQuery.toLowerCase());
+    }).toList();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() {
+      setState(() {
+        _searchQuery = _searchController.text.trim();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,16 +68,18 @@ class _TopicsState extends State<Topics> {
             const SizedBox(height: 12),
             Divider(color: customGray[100]),
             const SizedBox(height: 12),
-            const CustomOutlinedTextField(hintText: 'Search'),
+            CustomOutlinedTextField(
+              hintText: 'Search',
+              controller: _searchController,
+            ),
             const SizedBox(height: 12),
-
             Expanded(
               child: Stack(
                 children: [
                   Padding(
                     padding: EdgeInsets.only(bottom: buttonHeight + 16),
                     child: GridView.builder(
-                      itemCount: topics.length,
+                      itemCount: filteredTopics.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
@@ -68,8 +88,10 @@ class _TopicsState extends State<Topics> {
                             childAspectRatio: 0.85,
                           ),
                       itemBuilder: (context, index) {
-                        final topic = topics[index];
-                        final isSelected = selectedIndices.contains(index);
+                        final topic = filteredTopics[index];
+                        final isSelected = selectedLabels.contains(
+                          topic['label'],
+                        );
 
                         return TopicGridItem(
                           label: topic['label']!,
@@ -78,9 +100,9 @@ class _TopicsState extends State<Topics> {
                           onTap: () {
                             setState(() {
                               if (isSelected) {
-                                selectedIndices.remove(index);
+                                selectedLabels.remove(topic['label']);
                               } else {
-                                selectedIndices.add(index);
+                                selectedLabels.add(topic['label']!);
                               }
                             });
                           },
@@ -88,7 +110,6 @@ class _TopicsState extends State<Topics> {
                       },
                     ),
                   ),
-
                   Positioned(
                     bottom: 0,
                     left: 0,
@@ -105,10 +126,7 @@ class _TopicsState extends State<Topics> {
                           child: CustomFilledButton(
                             text: 'Next',
                             onPressed: () async {
-                              final selectedTopics =
-                                  selectedIndices
-                                      .map((index) => topics[index]['label']!)
-                                      .toList();
+                              final selectedTopics = selectedLabels.toList();
 
                               if (selectedTopics.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -122,7 +140,6 @@ class _TopicsState extends State<Topics> {
                               }
                               await saveSelectedTopics(selectedTopics);
 
-                              // Show loading indicator while fetching
                               showDialog(
                                 context: context,
                                 barrierDismissible: false,
@@ -139,9 +156,7 @@ class _TopicsState extends State<Topics> {
                                   perPage: 15,
                                 );
 
-                                Navigator.pop(context); // Remove loading dialog
-
-                                // Navigate to SkillLevel or your feed page with repos
+                                Navigator.pop(context);
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
@@ -154,7 +169,7 @@ class _TopicsState extends State<Topics> {
                                   ),
                                 );
                               } catch (e) {
-                                Navigator.pop(context); // Remove loading dialog
+                                Navigator.pop(context);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
@@ -177,4 +192,9 @@ class _TopicsState extends State<Topics> {
       ),
     );
   }
+}
+
+Future<void> saveSelectedTopics(List<String> topics) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setStringList('selected_topics', topics);
 }

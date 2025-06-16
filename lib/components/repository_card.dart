@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
-import '../utils/gemini_service.dart'; // Your Gemini API client
+import '../utils/gemini_service.dart'; 
 
 class RepositoryCard extends StatefulWidget {
   final Map<String, dynamic> repository;
-  final String? githubToken; // Optional GitHub token for API calls
+  final String? githubToken; 
 
   const RepositoryCard({Key? key, required this.repository, this.githubToken})
     : super(key: key);
@@ -38,10 +38,6 @@ class _RepositoryCardState extends State<RepositoryCard> {
       final name = repo['name'] as String;
       String? promptText = repo['description'];
 
-      // Log the initial description
-      print('Repo: $owner/$name');
-      print('Initial description: ${promptText ?? "No description"}');
-
       // If description is missing or empty, fetch README content
       if (promptText == null || promptText.trim().isEmpty) {
         promptText = await _fetchReadme(owner, name, widget.githubToken);
@@ -61,13 +57,7 @@ class _RepositoryCardState extends State<RepositoryCard> {
       }
 
       final prompt = 'Summarize this GitHub repository content:\n$promptText';
-
-      // Log the prompt sent to Gemini
-      print('Prompt sent to Gemini API: ${prompt.length} characters');
-
       final summary = await GeminiService.generateSummary(prompt);
-      // Log the Gemini API response summary
-      print('Gemini summary: ${summary ?? "No summary returned"}');
 
       if (mounted) {
         setState(() {
@@ -104,8 +94,7 @@ class _RepositoryCardState extends State<RepositoryCard> {
         return utf8.decode(decodedBytes);
       }
     } else {
-      // Optional: handle 404 or other errors silently
-      // print('Failed to fetch README: ${response.statusCode}');
+      print('Failed to fetch README: ${response.statusCode}');
     }
     return null;
   }

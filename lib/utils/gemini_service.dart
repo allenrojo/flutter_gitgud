@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class GeminiService {
-  // Reads GEMINI_API_KEY from the default .env file loaded by dotenv.load()
   static String get _apiKey => dotenv.env['GEMINI_API_KEY'] ?? '';
 
   static Future<String?> generateSummary(String prompt) async {
