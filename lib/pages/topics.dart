@@ -5,7 +5,7 @@ import 'package:flutter_application_gitgud/utils/colors.dart';
 import 'package:flutter_application_gitgud/utils/github_api.dart';
 import '../components/textfield_outline.dart';
 import '../components/topic_grid_item.dart';
-import '../utils/grid_data.dart';
+import '../utils/topic_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Topics extends StatefulWidget {
